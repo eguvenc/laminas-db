@@ -38,10 +38,18 @@ class Mysql extends AbstractPlatform
     protected $quoteIdentifierFragmentPattern = '/([^0-9,a-z,A-Z$_\-:])/i';
 
     /**
+     * @param array $options
      * @param null|\Laminas\Db\Adapter\Driver\Mysqli\Mysqli|\Laminas\Db\Adapter\Driver\Pdo\Pdo|\mysqli|\PDO $driver
      */
-    public function __construct($driver = null)
+    public function __construct($options = [], $driver = null)
     {
+        if (isset($options['quote_identifiers'])
+            && ($options['quote_identifiers'] == false
+            || $options['quote_identifiers'] === 'false')
+        ) {
+            $this->quoteIdentifiers = false;
+        }
+
         if ($driver) {
             $this->setDriver($driver);
         }
